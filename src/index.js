@@ -1,11 +1,14 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
+import './styles/index.scss'
 
 const HelloWorldReact = () => {
   return (
-    <h1>
-      Hello World from ReactJS!!
-    </h1>
+    <div className="container">
+      <div className="header">
+        <h1>Welcome to React application</h1>
+      </div>
+    </div>
   )
 }
 

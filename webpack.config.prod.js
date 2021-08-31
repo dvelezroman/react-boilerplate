@@ -1,9 +1,11 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
- mode: 'development',
+ mode: 'production',
  entry: path.join(__dirname, "src", "index.js"),
+ devtool: "source-map",
  output: {
    path: path.resolve(__dirname, "/build"),
    filename: "bundle.js"
@@ -22,7 +24,7 @@ module.exports = {
     },
     {
       test: /\.(s(a|c)ss)$/,
-      use: ['style-loader','css-loader', 'sass-loader']
+      use: [MiniCssExtractPlugin,'css-loader', 'sass-loader']
     },
     {
       test: /\.(png|jp(e*)g|svg|gif)$/,
