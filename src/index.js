@@ -2,7 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import './styles/index.scss'
 
-const HelloWorldReact = () => {
+const App = () => {
   return (
     <div className="container">
       <div className="header">
@@ -12,4 +12,4 @@ const HelloWorldReact = () => {
   )
 }
 
-ReactDOM.render(<HelloWorldReact />, document.getElementById("root"))
+ReactDOM.render(<App />, document.getElementById("root"))

@@ -1,4 +1,4 @@
-@import url(./font.scss);
+@import url(../fonts/font.scss);
 
 .container {
   height: 100vh;
@@ -10,6 +10,7 @@
 
     h1 {
       color: #FFF;
+      font-family: 'Open Sans Regular';
     }
   }
 }
