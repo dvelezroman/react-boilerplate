@@ -1,15 +1,20 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
+import { render as ReactDOM } from 'react-dom'
+import LoginFormik from './pages/LoginPage'
+
 import './styles/index.scss'
 
 const App = () => {
   return (
-    <div className="container">
-      <div className="header">
-        <h1>Welcome to React application</h1>
+    <React.StrictMode>
+      <div className="container">
+        <div className="header">
+          <h1>Welcome to React application</h1>
+        </div>
+        <LoginFormik />
       </div>
-    </div>
+    </React.StrictMode>
   )
 }
 
-ReactDOM.render(<App />, document.getElementById("root"))
+ReactDOM(<App />, document.getElementById("root"))
