@@ -1,22 +1,34 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { render as ReactDOM } from 'react-dom'
-import LoginFormik from './pages/LoginPage'
-import configData from './config/development.env.json'
+import LoadingOverlay from 'react-loading-overlay-ts'
 
-console.log(configData)
+import LoginScreen from './pages/LoginScreen'
+import configData from './config/development.env.json'
 
 import './styles/index.scss'
 
+export const AppContext = React.createContext(null)
+
 const App = () => {
+  const [loading, setLoading] = useState(false)
+
   return (
-    <React.StrictMode>
-      <div className="container">
-        <div className="header">
-          <h1>Welcome to React application</h1>
-        </div>
-        <LoginFormik />
-      </div>
-    </React.StrictMode>
+    <>
+      <AppContext.Provider value={{ configData, loading: false, setLoading }}>
+        <LoadingOverlay
+          active={loading}
+          spinner
+          text='Loading...'
+        >
+          <div className="container">
+            <div className="header">
+              <h1>Welcome to React application</h1>
+            </div>
+            <LoginScreen />
+          </div>
+        </LoadingOverlay>
+      </AppContext.Provider>
+    </>
   )
 }
 
