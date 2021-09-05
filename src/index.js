@@ -1,41 +1,65 @@
-import React, { useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { render as ReactDOM } from 'react-dom'
 import { BrowserRouter, Route } from 'react-router-dom'
 import LoadingOverlay from 'react-loading-overlay-ts'
 
 import LoginScreen from './pages/public/LoginScreen'
 import Home from './pages/public/Home'
+import ProtectedRoute from './routing/ProtectedRoute'
+import Header from './components/common/Header'
 
 import configData from './config/development.env.json'
 
 import './styles/index.scss'
-import ProtectedRoute from './routing/ProtectedRoute'
+import { getSessionStorage, removeSessionStorage } from './utils/storage'
+import { wrapWithLoadingPause } from './utils/common'
 
 export const AppContext = React.createContext(null)
 
 const App = () => {
+
+  const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [loading, setLoading] = useState(false)
 
+  const handleLogout = () => {
+    setLoading(true)
+    wrapWithLoadingPause(() => {
+      removeSessionStorage('alkemyToken')
+      setIsAuthenticated(false)
+      setLoading(false)
+    }, 2000)
+  }
+
+  useEffect(() => {
+    setIsAuthenticated(!!getSessionStorage('alkemyToken'))
+  }, [])
+
   return (
-    <>
-      <AppContext.Provider value={{ configData, loading: false, setLoading }}>
+    <BrowserRouter>
+      <AppContext.Provider
+        value={{
+          configData,
+          loading,
+          setLoading,
+          isAuthenticated,
+          setIsAuthenticated,
+          handleLogout
+        }}
+      >
         <LoadingOverlay
           active={loading}
           spinner
           text='Loading...'
         >
           <div className="container">
-            <div className="header">
-              <h1>Welcome to React application</h1>
-            </div>
-            <BrowserRouter>
-              <Route exact path="/signin" component={LoginScreen} />
-              <ProtectedRoute exact path="/" component={Home} />
-            </BrowserRouter>
+            <Header />
+            <Route exact path="/signin" component={LoginScreen} />
+            <ProtectedRoute exact path="/" component={Home} />
+
           </div>
         </LoadingOverlay>
       </AppContext.Provider>
-    </>
+    </BrowserRouter>
   )
 }
 

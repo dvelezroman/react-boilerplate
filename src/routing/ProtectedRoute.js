@@ -3,7 +3,8 @@ import { Redirect, Route } from 'react-router'
 import { getSessionStorage } from '../utils/storage'
 
 function ProtectedRoute ({ component: Component, ...restOfProps }) {
-  const isAuthenticated = getSessionStorage('alkemyToken')
+
+  const isAuthenticated = !!getSessionStorage('alkemyToken')
 
   return (
     <Route
