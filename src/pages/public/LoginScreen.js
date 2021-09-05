@@ -1,9 +1,10 @@
 import React, { useContext, useEffect } from 'react'
 import * as Yup from 'yup'
 import { withFormik, Form, Field } from 'formik'
-import "../styles/LoginPage.scss"
-import { AppContext } from '..'
-import { setSessionStorage } from '../utils/storage'
+import "../../styles/LoginPage.scss"
+
+import { setSessionStorage } from '../../utils/storage'
+import { AppContext } from '../..'
 
 const LoginForm = (props) => {
   const { touched, errors } = props;
@@ -71,7 +72,7 @@ const LoginScreen = () => {
       // HANDLE RESPONSE DATA
       console.log(data)
       // navigate to Main Page
-      // setSessionStorage('alkemyToken', data?.token)
+      setSessionStorage('alkemyToken', data?.token)
     }).catch((error) => {
       // HANDLE ERROR
       console.log(error)

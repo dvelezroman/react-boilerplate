@@ -1,11 +1,15 @@
 import React, { useState } from 'react'
 import { render as ReactDOM } from 'react-dom'
+import { BrowserRouter, Route } from 'react-router-dom'
 import LoadingOverlay from 'react-loading-overlay-ts'
 
-import LoginScreen from './pages/LoginScreen'
+import LoginScreen from './pages/public/LoginScreen'
+import Home from './pages/public/Home'
+
 import configData from './config/development.env.json'
 
 import './styles/index.scss'
+import ProtectedRoute from './routing/ProtectedRoute'
 
 export const AppContext = React.createContext(null)
 
@@ -24,7 +28,10 @@ const App = () => {
             <div className="header">
               <h1>Welcome to React application</h1>
             </div>
-            <LoginScreen />
+            <BrowserRouter>
+              <Route exact path="/signin" component={LoginScreen} />
+              <ProtectedRoute exact path="/" component={Home} />
+            </BrowserRouter>
           </div>
         </LoadingOverlay>
       </AppContext.Provider>
