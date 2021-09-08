@@ -1,9 +1,12 @@
 import React, { useContext, useEffect } from 'react'
 import * as Yup from 'yup'
 import { withFormik, Form, Field } from 'formik'
-import "../styles/LoginPage.scss"
-import { AppContext } from '..'
-import { setSessionStorage } from '../utils/storage'
+import "../../styles/LoginPage.scss"
+
+import { setSessionStorage } from '../../utils/storage'
+import { AppContext } from '../..'
+import Button from '../../components/common/Button'
+import { useHistory } from 'react-router'
 
 const LoginForm = (props) => {
   const { touched, errors } = props;
@@ -11,11 +14,11 @@ const LoginForm = (props) => {
   return (
     <>
       <div className="login-wrapper" className="login-container">
-        <h2>Login Page</h2>
+        <h2>Login Form</h2>
         <Form className="form-container">
           <div className="form-group">
             <label htmlFor="email">Email</label>
-            <Field type="text" name="email" className={"form-control"} placeholder="Email" />
+            <Field type="text" autoComplete="on" name="email" className={"form-control"} placeholder="Email" />
             {touched.email && errors.email && <span className="help-block text-danger">{errors.email}</span>}
           </div>
           <div className="form-group">
@@ -23,7 +26,7 @@ const LoginForm = (props) => {
             <Field type="password" name="password" className={"form-control"} placeholder="Password" />
             {touched.password && errors.password && <span className="help-block text-danger">{errors.password}</span>}
           </div>
-          <button type="submit" className="btn btn-primary">Login</button>
+          <Button title="Login" />
         </Form>
       </div>
     </>
@@ -51,7 +54,14 @@ const LoginFormikWrapped = (props) => {
 }
 
 const LoginScreen = () => {
-  const { configData, setLoading } = useContext(AppContext)
+  const {
+    configData,
+    setLoading,
+    setIsAuthenticated,
+    setAlert
+  } = useContext(AppContext)
+
+  const history = useHistory()
 
   const handleSubmit = (values) => {
     const API_TO_GET_TOKEN = configData.ALKEMY_URL_TOKEN_PATH
@@ -65,16 +75,28 @@ const LoginScreen = () => {
         return response.json();
       } else {
         // HANDLE ERROR
+        setAlert({
+          type: "danger",
+          title: "Error",
+          msg: "Algo salio mal"
+        })
         throw new Error('Something went wrong');
       }
     }).then(data => {
       // HANDLE RESPONSE DATA
-      console.log(data)
       // navigate to Main Page
-      // setSessionStorage('alkemyToken', data?.token)
+      if (!!data?.token) {
+        setSessionStorage('alkemyToken', data?.token)
+        setIsAuthenticated(true)
+        history.push("/")
+      }
     }).catch((error) => {
       // HANDLE ERROR
-      console.log(error)
+      setAlert({
+        type: "warning",
+        title: "Aviso",
+        msg: "Email o password no valido"
+      })
     }).finally(() => {
       setLoading(false)
     });
