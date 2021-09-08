@@ -4,10 +4,10 @@ import { removeSessionStorage } from '../../utils/storage'
 import Button from './Button'
 import SearchBar from './SearchBar'
 
-export default function Header() {
+export default function Header(props) {
   const { handleLogout, isAuthenticated } = useContext(AppContext)
 
-  const showTitle = <h2 className="text-white">Header Title</h2>
+  const showTitle = <h2 className="text-white">{props.title}</h2>
   const showSearchBar = <SearchBar />
 
   return (

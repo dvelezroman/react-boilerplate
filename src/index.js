@@ -57,7 +57,7 @@ const App = () => {
         >
           <div className="container">
             {alert && <AlertCustom { ...alert } onClose={() => setAlert(null)} />}
-            <Header />
+            <Header title="Challenge Demo" />
             <Route exact path="/signin" component={LoginScreen} />
             <ProtectedRoute exact path="/about" component={About} />
             <ProtectedRoute exact path="/" component={Home} />
