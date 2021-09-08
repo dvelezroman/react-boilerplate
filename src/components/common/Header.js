@@ -2,19 +2,24 @@ import React, { useContext } from 'react'
 import { AppContext } from '../..'
 import { removeSessionStorage } from '../../utils/storage'
 import Button from './Button'
+import SearchBar from './SearchBar'
 
 export default function Header() {
-  const { handleLogout } = useContext(AppContext)
+  const { handleLogout, isAuthenticated } = useContext(AppContext)
 
-  const { isAuthenticated } = useContext(AppContext)
+  const showTitle = <h2 className="text-white">Header Title</h2>
+  const showSearchBar = <SearchBar />
 
   return (
     <div className="header">
       <div className="row">
-        <div className="col-9">
-          <h1>Header Title</h1>
+        <div className="col-10">
+          {isAuthenticated ?
+            showSearchBar :
+            showTitle
+          }
         </div>
-        <div className="col-3">
+        <div className="col-2">
           {isAuthenticated && <Button title='Logout' onClick={handleLogout} />}
         </div>
       </div>

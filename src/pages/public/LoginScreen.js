@@ -14,7 +14,7 @@ const LoginForm = (props) => {
   return (
     <>
       <div className="login-wrapper" className="login-container">
-        <h2>Login Page</h2>
+        <h2>Login Form</h2>
         <Form className="form-container">
           <div className="form-group">
             <label htmlFor="email">Email</label>
@@ -57,7 +57,8 @@ const LoginScreen = () => {
   const {
     configData,
     setLoading,
-    setIsAuthenticated
+    setIsAuthenticated,
+    setAlert
   } = useContext(AppContext)
 
   const history = useHistory()
@@ -74,6 +75,11 @@ const LoginScreen = () => {
         return response.json();
       } else {
         // HANDLE ERROR
+        setAlert({
+          type: "danger",
+          title: "Error",
+          msg: "Algo salio mal"
+        })
         throw new Error('Something went wrong');
       }
     }).then(data => {
@@ -86,7 +92,11 @@ const LoginScreen = () => {
       }
     }).catch((error) => {
       // HANDLE ERROR
-      console.log(error)
+      setAlert({
+        type: "warning",
+        title: "Aviso",
+        msg: "Email o password no valido"
+      })
     }).finally(() => {
       setLoading(false)
     });
