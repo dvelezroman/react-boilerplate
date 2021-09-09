@@ -4,10 +4,6 @@ import searchResponse from '../../mockData/search.json'
 
 const Home = () => {
   const [data, setData] = useState([])
-
-  useEffect(() => {
-    setData(searchResponse.results)
-  }, [])
   
   const renderCards = () => {
     if (data.length) {
@@ -17,6 +13,10 @@ const Home = () => {
       <h2>No results</h2>
     )
   }
+
+  useEffect(() => {
+    setData(searchResponse.results)
+  }, [])
 
   return (
     <div className="row row-cols-4">
