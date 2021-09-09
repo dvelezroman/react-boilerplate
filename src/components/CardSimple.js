@@ -6,12 +6,12 @@ import Button from "./common/Button"
 const CardSimple = (props) => {
   const history = useHistory()
 
-  const goToDetails = () => {
-    history.push(`/heroe/${props.id}`)
-  }
-
   const saveToMyHeroes = () => {
     addHeroeToMyLocal(props.id)
+  }
+
+  const goToHeroeDetail = () => {
+    history.push(`/heroe/${props.id}`)
   }
 
   return (
@@ -25,8 +25,8 @@ const CardSimple = (props) => {
           <li className="list-group-item">{props.appearance?.['race'] || 'Raza no conocida'}</li>
           <li className="list-group-item">{props.biography?.['alignment'] || 'No alineado'}</li>
         </ul>
-        <Button title="Ver Detalle" onClick={goToDetails} />
         <Button title="Unir a Equipo" onClick={saveToMyHeroes} />
+        <Button title="Ver Detalle" onClick={goToHeroeDetail} />
       </div>
     </div>
   )

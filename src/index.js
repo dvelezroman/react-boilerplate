@@ -6,20 +6,22 @@ import LoadingOverlay from 'react-loading-overlay-ts'
 import LoginScreen from './pages/public/LoginScreen'
 import Home from './pages/auth/Home'
 import ProtectedRoute from './routing/ProtectedRoute'
-import Header from './components/common/Header'
+import Header from './components/Header'
+import Detail from './pages/auth/Detail'
+import AlertCustom from './components/common/AlertCustom'
 
 import configData from './config/development.env.json'
 
 import './styles/index.scss'
 import { getSessionStorage, removeSessionStorage } from './utils/storage'
-import { wrapWithLoadingPause } from './utils/common'
-import AlertCustom from './components/common/AlertCustom'
-import About from './pages/auth/About'
+import { getUrl, wrapWithLoadingPause } from './utils/common'
 
 export const AppContext = React.createContext(null)
 
 const App = () => {
-
+  const [heroes, setHeroes] = useState([])
+  const [filteredHeroes, setFilteredHeroes] = useState([])
+  const [searchString, setSearchString] = useState('')
   const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [loading, setLoading] = useState(false)
   const [alert, setAlert] = useState(null)
@@ -33,9 +35,51 @@ const App = () => {
     }, 2000)
   }
 
+  const doSearchHeroes = () => {
+    const filtered = heroes.filter(heroe => heroe.name.toLowerCase().includes(searchString.toLowerCase()))
+    setFilteredHeroes(filtered)
+  }
+
+  const getHeroesFromAPi = () => {
+    const url = getUrl(`all.json`)
+
+    fetch(url, {
+      headers: {}
+    }).then(response => {
+      if (response.ok) {
+        return response.json();
+      } else {
+        // HANDLE ERROR
+        setAlert({
+          type: "danger",
+          title: "Error",
+          msg: "Algo salio mal"
+        })
+        throw new Error('Something went wrong');
+      }
+    }).then(data => {
+      // HANDLE RESPONSE DATA
+      setHeroes(data)
+      setFilteredHeroes(data)
+    }).catch((error) => {
+      // HANDLE ERROR
+      setAlert({
+        type: "warning",
+        title: "Aviso",
+        msg: error.message
+      })
+    }).finally(() => {
+      setLoading(false)
+    });
+  }
+
   useEffect(() => {
     setIsAuthenticated(!!getSessionStorage('alkemyToken'))
   }, [])
+
+  useEffect(() => {
+    getHeroesFromAPi()
+  },[])
 
   return (
     <Router>
@@ -47,7 +91,11 @@ const App = () => {
           isAuthenticated,
           setIsAuthenticated,
           handleLogout,
-          setAlert
+          setAlert,
+          searchString,
+          setSearchString,
+          filteredHeroes,
+          doSearchHeroes
         }}
       >
         <LoadingOverlay
@@ -59,9 +107,8 @@ const App = () => {
             {alert && <AlertCustom { ...alert } onClose={() => setAlert(null)} />}
             <Header title="Challenge Demo" />
             <Route exact path="/signin" component={LoginScreen} />
-            <ProtectedRoute exact path="/about" component={About} />
+            <ProtectedRoute exact path="/heroe/:id" component={Detail} />
             <ProtectedRoute exact path="/" component={Home} />
-
           </div>
         </LoadingOverlay>
       </AppContext.Provider>
