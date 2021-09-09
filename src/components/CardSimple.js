@@ -1,18 +1,32 @@
 import React from "react"
+import { useHistory } from "react-router-dom"
+import { addHeroeToMyLocal } from "../utils/storage"
+import Button from "./common/Button"
 
 const CardSimple = (props) => {
+  const history = useHistory()
+
+  const goToDetails = () => {
+    history.push(`/heroe/${props.id}`)
+  }
+
+  const saveToMyHeroes = () => {
+    addHeroeToMyLocal(props.id)
+  }
+
   return (
     <div className="card col">
-      <img src={props.image?.url} className="card-img-top" alt={props.name} />
+      <img src={props.images?.sm} className="card-img-top" alt={props.name} />
       <div className="card-body">
         <h5 className="card-title">{props.name}</h5>
-        <ul class="list-group list-group-flush">
-          <li class="list-group-item">{props.biography?.['full-name'] || 'Nombre Real no conocido'}</li>
-          <li class="list-group-item">{props.appearance?.['gender'] || 'Genero no conocido'}</li>
-          <li class="list-group-item">{props.appearance?.['race'] || 'Raza no conocida'}</li>
-          <li class="list-group-item">{props.biography?.['alignment'] || 'No alineado'}</li>
+        <ul className="list-group list-group-flush">
+          <li className="list-group-item">{props.biography?.['full-name'] || 'Nombre Real no conocido'}</li>
+          <li className="list-group-item">{props.appearance?.['gender'] || 'Genero no conocido'}</li>
+          <li className="list-group-item">{props.appearance?.['race'] || 'Raza no conocida'}</li>
+          <li className="list-group-item">{props.biography?.['alignment'] || 'No alineado'}</li>
         </ul>
-        <a href="#" className="btn btn-primary">Ver Detalle</a>
+        <Button title="Ver Detalle" onClick={goToDetails} />
+        <Button title="Unir a Equipo" onClick={saveToMyHeroes} />
       </div>
     </div>
   )

@@ -9,3 +9,11 @@ export const getSessionStorage = (key) => {
 export const removeSessionStorage = (key) => {
   return sessionStorage.removeItem(key)
 }
+
+const myHeroesKey = 'myHeroes'
+
+export const addHeroeToMyLocal = (heroe) => {
+  const myHeroes = JSON.parse(getSessionStorage(myHeroesKey)) || []
+  myHeroes.push(heroe)
+  setSessionStorage(myHeroesKey, JSON.stringify(myHeroes))
+}
